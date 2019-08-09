@@ -8,7 +8,7 @@ var tally = {
     separator = ' \n';
 
     // build the output
-    pollResults = 'Current Poll: ' + data.pollName + ' ';
+    pollResults = 'Motion to ' + data.pollName + ' ';
     pollResults += '\nResults: \n';
     _.each(data.answers, function(answer) {
       formattedAnswerName = answer.answerName.capitalizeFirstLetter();

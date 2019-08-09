@@ -10,6 +10,7 @@ var poll = ''
   , slackRes = ''
   , rtg = ''
   , newPollID = ''
+  , username = ''
   , ts = Math.floor(Date.now() / 1000);
 
 exports.post = function (req, res, next) {
@@ -22,6 +23,7 @@ exports.post = function (req, res, next) {
     pollnameText = req.body.text;
     triggerWord = req.body.trigger_word;
     channelId = req.body.channel_id;
+    username = req.body.user_name;
     pollnameText = pollnameText.replace(triggerWord + ' ', '');
     poll = {
         'pollName': pollnameText,
@@ -59,8 +61,29 @@ exports.post = function (req, res, next) {
     }
 
     function confirmNewPoll(data) {
-        slackRes += '\nYour poll is set up. Please start voting for ' + tally.printPoll(JSON.parse(data));
-        res.json({text: slackRes});
+        slackRes += '\n*' + username + 'has made a motion.*';
+        var printedPoll = tally.printPoll(JSON.parse(data));
+        //slackRes += '\nYour poll is set up. Please start voting for ' + tally.printPoll(JSON.parse(data));
+        res.json({
+            "text": slackRes,
+            "attachments": [
+                {
+                    "text": printedPoll,
+                    "fallback": "You are unable to second.",
+                    "callback_id": "wopr_game",
+                    "color": "#3AA3E3",
+                    "attachment_type": "default",
+                    "actions": [
+                        {
+                            "name": "second",
+                            "text": "I second.",
+                            "type": "button",
+                            "value": "second"
+                        }
+                    ]
+                }
+            ]
+        });
     }
 
 };
