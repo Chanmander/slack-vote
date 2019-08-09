@@ -31,6 +31,7 @@ String.prototype.capitalizeFirstLetter = function () {
  * Handle voting actions.
  */
 exports.post = function (req, res, next) {
+    console.log(req.body);
 
     triggerWord = req.body.trigger_word;
     answerText = req.body.text;
