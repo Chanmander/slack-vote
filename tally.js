@@ -2,25 +2,25 @@ _ = require('underscore');
 
 var tally = {
 
-  printPoll: function(data) {
+  printMotion: function(data) {
 
-    // the string that separates poll items when printing
+    // the string that separates motion items when printing
     separator = ' \n';
 
     // build the output
-    pollResults = 'Motion to ' + data.pollName + ' ';
-    pollResults += '\nResults: \n';
+    motionResults = '*Motion to _' + data.motionName + '_*';
+    motionResults += '\nResults: \n';
     _.each(data.answers, function(answer) {
       formattedAnswerName = answer.answerName.capitalizeFirstLetter();
-      pollResults += formattedAnswerName + ': ' + answer.votes.length + separator;
+      motionResults += formattedAnswerName + ': ' + answer.votes.length + separator;
     });
 
     // Remove the last separator (newline) to avoid extra empty line
-    lastIndexOfSeparator = pollResults.lastIndexOf(separator);
+    lastIndexOfSeparator = motionResults.lastIndexOf(separator);
     if (lastIndexOfSeparator > separator.length) {
-      pollResults = pollResults.substring(0, lastIndexOfSeparator);
+      motionResults = motionResults.substring(0, lastIndexOfSeparator);
     }
-    return pollResults;
+    return motionResults;
   }
 };
 

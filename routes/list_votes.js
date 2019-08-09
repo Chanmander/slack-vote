@@ -2,25 +2,25 @@ var data = ''
   , tally = require('./../tally.js')
   , returnText = ''
   , slackRes = ''
-  , poll = ''
+  , motion = ''
   , dbActions = require('./../persist.js')
 
 exports.post = function (req, res, next) {
 
-    console.log('List results of current poll.');
+    console.log('List results of current motion.');
 
     /*
-     * Print active poll results.
+     * Print active motion results.
      * TBD: Needs to be refactored if we want to use this route
      */
-    // dbActions.getActivePollId(fetchActivePoll);
-    // function fetchActivePoll(pollId) {
-    //   console.log('Fetching active poll: ' + pollId);
-    //   dbActions.getPoll(pollId, printPoll);
+    // dbActions.getActiveMotionId(fetchActiveMotion);
+    // function fetchActiveMotion(motionId) {
+    //   console.log('Fetching active motion: ' + motionId);
+    //   dbActions.getMotion(motionId, printMotion);
     // }
-    // function printPoll(data) {
-    //   slackRes = 'Here are the current votes: \n ' + tally.printPoll(JSON.parse(data));
-    //   console.log('printPoll: ' + slackRes);
+    // function printMotion(data) {
+    //   slackRes = 'Here are the current votes: \n ' + tally.printMotion(JSON.parse(data));
+    //   console.log('printMotion: ' + slackRes);
     //   res.json({text: slackRes});
     // }
 

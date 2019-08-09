@@ -1,7 +1,7 @@
 {
   "name": "slack-vote",
   "version": "0.5.0",
-  "description": "A voting/polling backend for Slack outgoing webhook configurations",
+  "description": "A voting/motioning backend for Slack outgoing webhook configurations",
   "main": "server.js",
   "scripts": {
     "test": "mocha tests/index.js",

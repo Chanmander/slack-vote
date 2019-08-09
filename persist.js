@@ -1,7 +1,7 @@
 var redis = require('redis')
-  , pollnameText = ''
+  , motionnameText = ''
   , triggerWord = ''
-  , pollnameText = ''
+  , motionnameText = ''
   , slackRes = ''
   , client = ''
   , rtg = ''
@@ -34,10 +34,10 @@ var redis = require('redis')
 var dbActions = {
 
   /*
-   * Set poll data.
+   * Set motion data.
    */
-  setPoll: function(pollKey, pollData, callback) {
-    client.set(pollKey, pollData, function (err, reply) {
+  setMotion: function(motionKey, motionData, callback) {
+    client.set(motionKey, motionData, function (err, reply) {
       if (reply) {
         callback(reply);
       }
@@ -45,13 +45,13 @@ var dbActions = {
   },
 
   /*
-   * Disable poll. The pollData var should have a field that sets the poll to inactive
+   * Disable motion. The motionData var should have a field that sets the motion to inactive
    */
-  disablePoll: function(pollKey, pollData, callback) {
-    client.set(pollKey, pollData, function (err, reply) {
+  disableMotion: function(motionKey, motionData, callback) {
+    client.set(motionKey, motionData, function (err, reply) {
       if (err) {
-        console.log(pollKey);
-        console.log(pollData);
+        console.log(motionKey);
+        console.log(motionData);
         console.log(err);
       }
       if (reply) {
@@ -61,10 +61,10 @@ var dbActions = {
   },
 
   /*
-   * Get poll from id.
+   * Get motion from id.
    */
-  getPoll: function(pollId, callback) {
-    client.get(pollId, function (err, reply) {
+  getMotion: function(motionId, callback) {
+    client.get(motionId, function (err, reply) {
       if (reply) {
         callback(reply);
       } else {

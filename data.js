@@ -1,7 +1,7 @@
-var poll = {
-  pollName: 'What\'s For Lunch?',
+var motion = {
+  motionName: 'What\'s For Lunch?',
   status: 1,
   votes: []
 };
 
-module.exports = poll;
+module.exports = motion;

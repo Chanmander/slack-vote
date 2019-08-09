@@ -1,15 +1,15 @@
-var poll = ''
+var motion = ''
   , dbActions = require('./../persist.js')
   , tally = require('./../tally.js')
-  , activePoll = ''
+  , activeMotion = ''
   , redis = require('redis')
-  , pollnameText = ''
+  , motionnameText = ''
   , triggerWord = ''
   , channelId = ''
-  , pollnameText = ''
+  , motionnameText = ''
   , slackRes = ''
   , rtg = ''
-  , newPollID = ''
+  , newMotionID = ''
   , username = ''
   , ts = Math.floor(Date.now() / 1000);
 
@@ -18,65 +18,65 @@ exports.post = function (req, res, next) {
     console.log('Start vote route.');
 
     /*
-     * Start poll data.
+     * Start motion data.
      */
-    pollnameText = req.body.text;
+    motionnameText = req.body.text;
     triggerWord = req.body.trigger_word;
     channelId = req.body.channel_id;
     username = req.body.user_name;
-    pollnameText = pollnameText.replace(triggerWord + ' ', '');
-    poll = {
-        'pollName': pollnameText,
+    motionnameText = motionnameText.replace(triggerWord + ' ', '');
+    motion = {
+        'motionName': motionnameText,
         'active': 1,
         'answers': []
     };
 
-    newPollID = 'activePoll_' + channelId;
+    newMotionID = 'activeMotion_' + channelId;
 
     /*
-     * Fetch and print current active poll.
+     * Fetch and print current active motion.
      */
-    dbActions.getPoll(newPollID, listActivePoll);
+    dbActions.getMotion(newMotionID, listActiveMotion);
 
-    function listActivePoll(data) {
-        console.log('Current Active Poll: ' + data);
+    function listActiveMotion(data) {
+        console.log('Current Active Motion: ' + data);
         if (data === null) {
-            console.log('There is no current active poll, setting up new poll.');
+            console.log('There is no current active motion, setting up new motion.');
         } else {
-            console.log('Current poll is closing.');
-            slackRes = 'Closing Active Poll. Here were the results of the now-closed poll.\n' + tally.printPoll(JSON.parse(data)) + '\n';
+            console.log('Current motion is closing.');
+            slackRes = 'Closing Active Motion. Here were the results of the now-closed motion.\n' + tally.printMotion(JSON.parse(data)) + '\n';
         }
     }
 
     /*
-     * Set new poll with the active poll id.
+     * Set new motion with the active motion id.
      * Print confirmation and vote message.
      */
-    console.log('Setting up new poll with ID: ' + newPollID);
-    dbActions.setPoll(newPollID, JSON.stringify(poll), printNewPoll);
+    console.log('Setting up new motion with ID: ' + newMotionID);
+    dbActions.setMotion(newMotionID, JSON.stringify(motion), printNewMotion);
 
-    function printNewPoll() {
-        console.log('New poll is set up with the ID: ' + newPollID);
-        dbActions.getPoll(newPollID, confirmNewPoll);
+    function printNewMotion() {
+        console.log('New motion is set up with the ID: ' + newMotionID);
+        dbActions.getMotion(newMotionID, confirmNewMotion);
     }
 
-    function confirmNewPoll(data) {
-        slackRes += '\n*' + username + 'has made a motion.*';
-        var printedPoll = tally.printPoll(JSON.parse(data));
-        //slackRes += '\nYour poll is set up. Please start voting for ' + tally.printPoll(JSON.parse(data));
+    function confirmNewMotion(data) {
+        slackRes += '\n' + username + ' has brought a motion to the floor.';
+        var printedMotion = tally.printMotion(JSON.parse(data));
+        //slackRes += '\nYour motion is set up. Please start voting for ' + tally.printMotion(JSON.parse(data));
         res.json({
             "text": slackRes,
             "attachments": [
                 {
-                    "text": printedPoll,
+                    "text": printedMotion,
                     "fallback": "You are unable to second.",
-                    "callback_id": "wopr_game",
+                    "callback_id": "second",
                     "color": "#3AA3E3",
                     "attachment_type": "default",
                     "actions": [
                         {
                             "name": "second",
-                            "text": "I second.",
+                            "text": "Second",
                             "type": "button",
                             "value": "second"
                         }

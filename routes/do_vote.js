@@ -1,11 +1,11 @@
-var poll = ''
+var motion = ''
   , _ = require('underscore')
   , dbActions = require('./../persist.js')
   , tally = require('./../tally.js')
   , redis = require('redis')
-  , activePoll = ''
+  , activeMotion = ''
   , slackRes = ''
-  , pollResults = ''
+  , motionResults = ''
   , answerText = ''
   , userName = ''
   , userID = ''
@@ -38,7 +38,7 @@ exports.post = function (req, res, next) {
     userName = req.body.user_name;
     userID = req.body.user_id;
     timestamp = req.body.timestamp;
-    pollId = 'activePoll_' + req.body.channel_id;
+    motionId = 'activeMotion_' + req.body.channel_id;
 
     postedVote = {
         'userName': userName,
@@ -46,14 +46,14 @@ exports.post = function (req, res, next) {
         'timestamp': timestamp
     };
 
-    console.log('Incoming post. Answer text: ' + answerText + '. pollId: ' + pollId + '\n');
+    console.log('Incoming post. Answer text: ' + answerText + '. motionId: ' + motionId + '\n');
 
-    dbActions.getPoll(pollId, setData);
+    dbActions.getMotion(motionId, setData);
 
-    function setData(poll_string) {
-        console.log('Poll prior to submission: ' + poll_string);
-        if (poll_string) {
-            data = JSON.parse(poll_string);
+    function setData(motion_string) {
+        console.log('Motion prior to submission: ' + motion_string);
+        if (motion_string) {
+            data = JSON.parse(motion_string);
             if (data.active == 1) {
                 _.each(data.answers, function (answer) {
                     if (answerText === answer.answerName) {
@@ -64,22 +64,22 @@ exports.post = function (req, res, next) {
                 });
 
                 if (!answerMatch) {
-                    console.log('No poll answer match, creating new poll answer for: ' + answerText);
+                    console.log('No motion answer match, creating new motion answer for: ' + answerText);
                     newAnswer = {
                         answerName: answerText,
                         votes: new Array(postedVote)
                     };
                     data.answers.push(newAnswer);
-                    console.log('Poll after submission: ' + poll_string);
+                    console.log('Motion after submission: ' + motion_string);
                 }
                 answerMatch = false; // not sure why this is here - ben833
-                dbActions.setPoll(pollId, JSON.stringify(data), handleResults);
-                dbActions.getPoll(pollId, function (result_string) {
-                    console.log('Poll after submission: ' + result_string);
+                dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
+                dbActions.getMotion(motionId, function (result_string) {
+                    console.log('Motion after submission: ' + result_string);
                 });
             } else {
                 data = {
-                    'pollName': 'There is no active poll set for this channel, please use the "start poll QUESTION" command to start a new poll',
+                    'motionName': 'There is no active motion set for this channel, please use the "start motion QUESTION" command to start a new motion',
                     'answers': []
                 };
                 handleResults();
@@ -88,7 +88,7 @@ exports.post = function (req, res, next) {
     }
 
     function handleResults() {
-        slackRes = tally.printPoll(data);
+        slackRes = tally.printMotion(data);
         res.json({text: slackRes});
     }
 };

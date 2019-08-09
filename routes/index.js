@@ -3,7 +3,7 @@ var express = require('express')
     , doVote = require('./do_vote.js')
     , listVotes = require('./list_votes.js')
     , startVotes = require('./start_vote.js')
-    , close = require('./close_poll.js');
+    , close = require('./close_motion.js');
 
 router.route('/vote').post(doVote.post);
 router.route('/votes').post(listVotes.post);

@@ -1,8 +1,8 @@
 <div align="center"><img src="http://i.imgur.com/zmvMFDO.png"/><br><br><img src="http://i.imgur.com/GU4eE21.gif"/></div><h4>Q: What is slack-vote?<br>A: A voting bot for <a href='http://www.slack.com'>Slack</a> created with <a href="http://www.nodejs.org">Node</a> and <a href="http://expressjs.com/">Express</a>, with easy deployment to <a href="http://www.heroku.com">Heroku</a></h2><br>
 
-With slack-vote, slack users can now start a poll and vote in a slack channel. Using the Slack API's Outgoing Integrations, users are able to enter these commands in the room:
+With slack-vote, slack users can now start a motion and vote in a slack channel. Using the Slack API's Outgoing Integrations, users are able to enter these commands in the room:
 ```
-start poll What's for Lunch?
+start motion What's for Lunch?
 ```
 This allows voting to begin. People can then "write in" a choice by voting for an item. Other people can vote for the same phrase (case insensitive).
 ```
@@ -12,7 +12,7 @@ If there is not already a vote for Pizza, a new option for Pizza is created. If 
 
 The bot will then respond with the results of the vote so far:
 ```
-Current Poll: What's for Lunch?
+Current Motion: What's for Lunch?
 Results:
 Chinese: 5
 Indian: 4
@@ -20,12 +20,12 @@ Pizza: 2
 Greek: 1
 ```
 
-At the end of the voting session, someone is able to close the poll by entering this in the channel:
+At the end of the voting session, someone is able to close the motion by entering this in the channel:
 ```
-close poll
+close motion
 ```
 
-*The server treats every Slack channel separately, so you can have concurrent polls on different subjects in multiple Slack channels.*
+*The server treats every Slack channel separately, so you can have concurrent motions on different subjects in multiple Slack channels.*
 
 ---
 # Setup
@@ -49,9 +49,9 @@ You'll need to add three outgoing webhook configurations:
 * your-slackvote-app.herokuapp.com/close
 
 For each of these webhooks, you'll need to add a trigger word. The above usage example uses these three trigger words for each of the respective webhooks:
-* start poll
+* start motion
 * vote
-* close poll
+* close motion
 
 You'll also have to choose your own image and bot name to appear when the server responses are published in your Slack channels. For consistency's sake, it makes sense to use the same image and bot name for each of the three webhook configurations.
 
