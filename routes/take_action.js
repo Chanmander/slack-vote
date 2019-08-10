@@ -64,10 +64,9 @@ exports.post = function (req, res, next) {
     }
 
     function handleResults(data) {
-        slackRes += '\n' + 'Got a second from ' + userName + '!';
         var printedMotion = tally.printMotion(data);
         res.json({
-            "text": slackRes,
+            "text": 'Got a second from ' + userName + '!',
             "attachments": [
                 {
                     "text": printedMotion,

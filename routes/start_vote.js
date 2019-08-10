@@ -34,21 +34,6 @@ exports.post = function (req, res, next) {
     newMotionID = Date.now();
 
     /*
-     * Fetch and print current active motion.
-     */
-    dbActions.getMotion(newMotionID, listActiveMotion);
-
-    function listActiveMotion(data) {
-        console.log('Current Active Motion: ' + data);
-        if (data === null) {
-            console.log('There is no current active motion, setting up new motion.');
-        } else {
-            console.log('Current motion is closing.');
-            slackRes = 'Closing Active Motion. Here were the results of the now-closed motion.\n' + tally.printMotion(JSON.parse(data)) + '\n';
-        }
-    }
-
-    /*
      * Set new motion with the active motion id.
      * Print confirmation and vote message.
      */
@@ -61,11 +46,9 @@ exports.post = function (req, res, next) {
     }
 
     function confirmNewMotion(data) {
-        slackRes += '\n' + userName + ' has brought a motion to the floor.';
         var printedMotion = tally.printMotion(JSON.parse(data));
-        //slackRes += '\nYour motion is set up. Please start voting for ' + tally.printMotion(JSON.parse(data));
         res.json({
-            "text": slackRes,
+            "text": userName + ' has brought a motion to the floor.',
             "attachments": [
                 {
                     "text": printedMotion,
