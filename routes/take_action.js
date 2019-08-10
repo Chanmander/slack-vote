@@ -27,6 +27,7 @@ exports.post = function (req, res, next) {
     var payload = JSON.parse(body.payload);
     var user = payload.user;
     userName = user.name;
+    userID = user.id;
 
     console.log(payload);
 
@@ -81,10 +82,6 @@ exports.post = function (req, res, next) {
                                 console.log('Motion after submission: ' + motion_string);
                             }
                             answerMatch = false; // not sure why this is here - ben833
-                            dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
-                            dbActions.getMotion(motionId, function (result_string) {
-                                console.log('Motion after submission: ' + result_string);
-                            });
                         } else {
                             text = 'No vote recorded somehow.';
                         }
