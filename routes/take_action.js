@@ -52,15 +52,52 @@ exports.post = function (req, res, next) {
                         console.log('Seconded motion ' + motionId + '!');
                         break;
                     case 'vote':
-                        text = 'Got a vote from ' + userName + '!';
+                        var postedVote = {
+                            'userName': userName,
+                            'userID': userID,
+                            'timestamp': timestamp
+                        };
+
+                        var actions = payload.actions;
+                        if (actions && actions.length === 1) {
+                            text = 'Got a vote from ' + userName + '!';
+                            var answerText = actions[0].name;
+
+                            _.each(data.answers, function (answer) {
+                                if (answerText === answer.answerName) {
+                                    // there is a votes array already, because this isn't the first vote
+                                    answer.votes.push(postedVote);
+                                    answerMatch = true;
+                                }
+                            });
+
+                            if (!answerMatch) {
+                                console.log('No motion answer match, creating new motion answer for: ' + answerText);
+                                newAnswer = {
+                                    answerName: answerText,
+                                    votes: new Array(postedVote)
+                                };
+                                data.answers.push(newAnswer);
+                                console.log('Motion after submission: ' + motion_string);
+                            }
+                            answerMatch = false; // not sure why this is here - ben833
+                            dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
+                            dbActions.getMotion(motionId, function (result_string) {
+                                console.log('Motion after submission: ' + result_string);
+                            });
+                        } else {
+                            text = 'No vote recorded somehow.';
+                        }
+
                         break;
                     default:
-                        res.json({
-                            text: 'Did not understand the action.'
-                        });
+                        text = 'Did not understand the action.'
                 }
 
                 dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
+                dbActions.getMotion(motionId, function (result_string) {
+                    console.log('Motion after submission: ' + result_string);
+                });
             } else {
                 res.json({
                     text: 'Motion inactive.' + data
@@ -82,16 +119,16 @@ exports.post = function (req, res, next) {
                     "attachment_type": "default",
                     "actions": [
                         {
-                            "name": "yes",
+                            "name": "Yay",
                             "text": "Yay",
                             "type": "button",
                             "value": "yes"
                         },
                         {
-                            "name": "no",
+                            "name": "Nay",
                             "text": "Nay",
                             "type": "button",
-                            "value": "yes"
+                            "value": "no"
                         }
                     ]
                 }
