@@ -61,9 +61,13 @@ exports.post = function (req, res, next) {
 
         request.post('https://slack.com/api/group.create', newGroupRequestBody, function (error, response, body) {
             console.log(body);
-            var group = body.group;
-            newGroupId = groupId;
-            sendInitialMessage();
+            if (body.ok) {
+                var group = body.group;
+                newGroupId = groupId;
+                sendInitialMessage();
+            } else {
+                res.json({text: body.error});
+            }
         });
     }
 
@@ -95,8 +99,13 @@ exports.post = function (req, res, next) {
         };
 
         request.post('https://slack.com/api/chat.postMessage', initMessageRequestBody, function (error, response, body) {
-          // Sends welcome message
-            handleResults();
+            console.log(body);
+            if (body.ok) {
+                // Sends welcome message
+                handleResults();
+            } else {
+                res.json({text: body.error});
+            }
         });
 
     }
