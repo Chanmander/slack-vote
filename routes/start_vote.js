@@ -6,7 +6,6 @@ var motion = ''
   , motionnameText = ''
   , triggerWord = ''
   , channelId = ''
-  , motionnameText = ''
   , slackRes = ''
   , rtg = ''
   , newMotionID = ''
@@ -26,12 +25,13 @@ exports.post = function (req, res, next) {
     userName = req.body.user_name;
     motionnameText = motionnameText.replace(triggerWord + ' ', '');
     motion = {
-        'motionName': motionnameText,
-        'active': 1,
-        'answers': []
+        "motionName": motionnameText,
+        "hasSecond": false,
+        "active": 1,
+        "answers": []
     };
 
-    newMotionID = 'activeMotion_' + channelId;
+    newMotionID = Date.now();
 
     /*
      * Fetch and print current active motion.
@@ -61,7 +61,7 @@ exports.post = function (req, res, next) {
     }
 
     function confirmNewMotion(data) {
-        slackRes += '\n' + username + ' has brought a motion to the floor.';
+        slackRes += '\n' + userName + ' has brought a motion to the floor.';
         var printedMotion = tally.printMotion(JSON.parse(data));
         //slackRes += '\nYour motion is set up. Please start voting for ' + tally.printMotion(JSON.parse(data));
         res.json({
@@ -70,7 +70,7 @@ exports.post = function (req, res, next) {
                 {
                     "text": printedMotion,
                     "fallback": "You are unable to second.",
-                    "callback_id": "second",
+                    "callback_id": "second_" + newMotionID,
                     "color": "#3AA3E3",
                     "attachment_type": "default",
                     "actions": [
