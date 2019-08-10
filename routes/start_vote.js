@@ -53,20 +53,20 @@ exports.post = function (req, res, next) {
 
     function createNewGroup() {
         var newGroupRequestBody = {
-            form: {
-                token: token,
-                name: "motion-" + motionNameForGroup
+            "form": {
+                "token": token,
+                "name": "motion-" + motionNameForGroup
             }
         };
 
-        request.post('https://slack.com/api/group.create', newGroupRequestBody, function (error, response, body) {
+        request.post('https://slack.com/api/groups.create', newGroupRequestBody, function (error, response, body) {
             console.log(body);
             if (body.ok) {
                 var group = body.group;
                 newGroupId = groupId;
                 sendInitialMessage();
             } else {
-                res.json({text: body.error});
+                res.json({"text": body.error});
             }
         });
     }
@@ -74,7 +74,7 @@ exports.post = function (req, res, next) {
     function sendInitialMessage() {
         var printedMotion = tally.printMotion(JSON.parse(motion));
         var initMessageRequestBody = {
-            form: {
+            "form": {
                 "token": token,
                 "channel": newGroupId,
                 "text": userName + ' has brought a motion to the floor.',
