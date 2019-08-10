@@ -10,7 +10,7 @@ var motion = ''
   , slackRes = ''
   , rtg = ''
   , newMotionID = ''
-  , username = ''
+  , userName = ''
   , ts = Math.floor(Date.now() / 1000);
 
 exports.post = function (req, res, next) {
@@ -23,7 +23,7 @@ exports.post = function (req, res, next) {
     motionnameText = req.body.text;
     triggerWord = req.body.trigger_word;
     channelId = req.body.channel_id;
-    username = req.body.user_name;
+    userName = req.body.user_name;
     motionnameText = motionnameText.replace(triggerWord + ' ', '');
     motion = {
         'motionName': motionnameText,
