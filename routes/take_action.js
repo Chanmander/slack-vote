@@ -15,6 +15,7 @@ var motion = ''
     , channelID = ''
     , triggerWord = ''
     , data = undefined
+    , text = ''
     , answerMatch = false;
 
 
@@ -46,15 +47,20 @@ exports.post = function (req, res, next) {
                 console.log('Action type: ' + actionType);
                 switch (actionType) {
                     case 'second':
+                        text = 'Got a second from ' + userName + '!';
                         data.hasSecond = true;
                         console.log('Seconded motion ' + motionId + '!');
-                        dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
+                        break;
+                    case 'vote':
+                        text = 'Got a vote from ' + userName + '!';
                         break;
                     default:
                         res.json({
                             text: 'Did not understand the action.'
                         });
                 }
+
+                dbActions.setMotion(motionId, JSON.stringify(data), handleResults);
             } else {
                 res.json({
                     text: 'Motion inactive.' + data
@@ -63,10 +69,10 @@ exports.post = function (req, res, next) {
         }
     }
 
-    function handleResults(data) {
+    function handleResults() {
         var printedMotion = tally.printMotion(data);
         res.json({
-            "text": 'Got a second from ' + userName + '!',
+            "text": text,
             "attachments": [
                 {
                     "text": printedMotion,
