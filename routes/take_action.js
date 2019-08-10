@@ -119,13 +119,14 @@ exports.post = function (req, res, next) {
                             "name": "Yay",
                             "text": "Yay",
                             "type": "button",
-                            "value": "yes"
+                            "value": "yes",
+                            "style": "primary"
                         },
                         {
                             "name": "Nay",
                             "text": "Nay",
                             "type": "button",
-                            "value": "no"
+                            "style": "danger"
                         }
                     ]
                 }
