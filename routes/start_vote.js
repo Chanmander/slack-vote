@@ -65,8 +65,6 @@ exports.post = function (req, res, next) {
             newGroupId = groupId;
             sendInitialMessage();
         });
-
-        res.json(secondResponse);
     }
 
     function sendInitialMessage() {
